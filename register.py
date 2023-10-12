@@ -1,0 +1,105 @@
+#!C:\Python311\python.exe
+print("Content-Type:text/html\n\r")
+
+import cgi
+import pymysql
+
+mydb=pymysql.Connect(host="localhost",user="root",password="mohan",database="second_project")
+mycursor=mydb.cursor()
+
+data=cgi.FieldStorage()
+name=data.getvalue("name")
+mail=data.getvalue("mail")
+pswd=data.getvalue("pass")
+mbl=data.getvalue("mobile")
+idnty=data.getvalue("id")
+
+if idnty=="Customer":
+
+    query="insert into member_details values(%s,%s,%s,%s)"
+    values=[name,mail,pswd,mbl]
+    mycursor.execute(query,values)
+    mydb.commit()
+
+elif idnty=="Vendor":
+    query="insert into vendor_details values(%s,%s,%s,%s)"
+    values=[name,mail,pswd,mbl]
+    mycursor.execute(query,values)
+    mydb.commit()
+
+print('''
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>E commerce</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<div class="main">
+		<div class="navbar">
+			<div class="icon">
+				<h2 class="logo">ONLINE MARKET</h2>
+			</div>
+
+			<div class="menu">
+				<ul>
+					<li><a href="#">HOME</a></li>
+					<li><a href="#">ABOUT</a></li>
+					<li><a href="#">SERVICE</a></li>
+					<li><a href="#">COURSE</a></li>
+					<li><a href="#">CONTACT</a></li>
+				</ul>
+			</div>			
+		</div>
+		<div class="content">
+			<h1>Find Your<br> Local Shops</h1><br>
+			<p class="par">Discover The Local Market Gems. Find great places to shop, eat & visit from the locals themselves.<br><br>While we tend to focus on the big-name online marketplaces such as eBay, Amazon, and Zalando, the local online <br><br>marketplaces are the true heroes for a broad fan.<br><br> Online shopping is a form of electronic commerce which allows consumers to directly buy goods or services from a<br><br> seller over the Internet using a web application.</p>
+				<div class="form">
+					<div class="button-box">
+						<div id="btn"></div>
+						<button type="button" class="toggle-btn" onclick="login()">Log In</button>
+						<button type="button" class="toggle-btn" onclick="register()">Register</button>
+					</div>
+					<form action=login.py id="login" class="input-group" method="post">
+						<input type="email" class="input-field" name="loginmail" placeholder="Enter Email Id" required>
+						<input type="password" class="input-field" name="loginpswd" placeholder="Enter password" required>
+						<input type="checkbox" class="check-box"><span>Remember Password</span>
+						<button type="submit" class="submit-btn" style="width:130px">Log in</button>
+
+					</form>
+					<form action=register.py id="register" class="input-group" method="post">
+						<input type="text" class="input-field" name="name" placeholder="User Name" required>
+						<input type="email" class="input-field" name="mail" placeholder="Email Id" required>
+						<input type="password" class="input-field" name="pass" placeholder="Enter password" required>
+						<input type="phone" class="input-field" name="mobile" placeholder="Enter mobile number" required><br><br>
+						<label><b>You are:</b></label>&emsp;&emsp;<input type ="radio" name="id" value="Customer">&emsp;Customer&emsp;
+						<input type ="radio" name="id" value="Vendor">&emsp;Vendor<br>						
+						<input type="checkbox" class="check-box"><span>I agree to the terms & conditions</span>
+						<button type="submit" class="submit-btn" style="width:130px" onclick="alert('You have successfully signup')">Register</button>
+
+					</form>
+					</div>
+				</div>
+		</div>
+	</div>
+<script>
+var x= document.getElementById("login");
+var y= document.getElementById("register");
+var z= document.getElementById("btn");
+
+function register(){
+	x.style.left="-400px";
+	y.style.left= "50px";
+	z.style.left= "110px";
+}
+
+function login(){
+	x.style.left="50px";
+	y.style.left= "450px";
+	z.style.left= "0";
+}
+
+</script>
+</body>
+</html>
+''')
